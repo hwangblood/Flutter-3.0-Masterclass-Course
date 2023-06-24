@@ -1,1 +1,13 @@
 include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    # avoid_print: false
+    prefer_single_quotes: true
+    require_trailing_commas: true
+    always_use_package_imports: true
+    # prefer_relative_imports: true
+    implementation_imports: true # Don't import implementation files from another package.
+    always_declare_return_types: true # always need to declare return types of functions
+    prefer_const_constructors_in_immutables: true
+    use_super_parameters: true
