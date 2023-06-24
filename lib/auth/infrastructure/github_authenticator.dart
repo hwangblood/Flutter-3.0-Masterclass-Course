@@ -1,6 +1,6 @@
-import 'package:flutter/services.dart';
-
 import 'package:dartz/dartz.dart' as dartz;
+import 'package:dio/dio.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:oauth2/oauth2.dart' as oauth2;
 
@@ -43,9 +43,18 @@ class GithubAuthenticator {
   /// redirect url after authorization, only redirect for web platform
   static final redirectUrl = Uri.parse('http://locahost:3000/callback');
 
+  static final revocationEndpoint = Uri.parse(
+    'https://api.github.com/applications/$clientId/grant',
+  );
+
   final CredentialsStorage _credentialsStorage;
 
-  GithubAuthenticator(this._credentialsStorage);
+  final Dio _dio;
+
+  GithubAuthenticator(
+    this._credentialsStorage,
+    this._dio,
+  );
 
   /// Get the signed in credentials, it hold the access token.
   /// No Credentials when user is not signed in, and Github does not use required tokens, but we still show a way to deal with it
@@ -67,7 +76,7 @@ class GithubAuthenticator {
   }
 
   Future<bool> checkSignedIn() => getSignedInCredentials().then(
-        (credentials) => credentials != null ? true : false,
+        (credentials) => credentials != null,
       );
 
   oauth2.AuthorizationCodeGrant createGrant() => oauth2.AuthorizationCodeGrant(
@@ -103,5 +112,32 @@ class GithubAuthenticator {
       return dartz.left(const AuthFailure.storage());
     }
     return const dartz.Right(dartz.unit);
+  }
+
+  /// User sign-out, return [AuthFailure] when error happens
+  Future<dartz.Either<AuthFailure, dartz.Unit>> signOut() async {
+    final accessToken = await _credentialsStorage.read().then(
+          (value) => value?.accessToken,
+        );
+    try {
+      // revoke the access token from github, it will be invalid
+      // https://docs.github.com/en/github-ae@latest/rest/apps/oauth-applications#delete-an-app-authorization
+      _dio.deleteUri(
+        revocationEndpoint,
+        data: {
+          'access_token': accessToken,
+        },
+        options: Options(
+          headers: {
+            'Accept': 'application/vnd.github+json',
+            'Authorization': 'Bearer $accessToken'
+          },
+        ),
+      );
+      await _credentialsStorage.clear();
+    } on PlatformException {
+      return dartz.left(const AuthFailure.storage());
+    }
+    return dartz.right(dartz.unit);
   }
 }
