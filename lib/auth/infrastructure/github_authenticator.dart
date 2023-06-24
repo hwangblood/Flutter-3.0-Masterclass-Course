@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
@@ -120,20 +122,32 @@ class GithubAuthenticator {
           (value) => value?.accessToken,
         );
     try {
-      // revoke the access token from github, it will be invalid
-      // https://docs.github.com/en/github-ae@latest/rest/apps/oauth-applications#delete-an-app-authorization
-      _dio.deleteUri(
-        revocationEndpoint,
-        data: {
-          'access_token': accessToken,
-        },
-        options: Options(
-          headers: {
-            'Accept': 'application/vnd.github+json',
-            'Authorization': 'Bearer $accessToken'
+      try {
+        // revoke the access token from github, it will be invalid
+        // https://docs.github.com/en/github-ae@latest/rest/apps/oauth-applications#delete-an-app-authorization
+        _dio.deleteUri(
+          revocationEndpoint,
+          data: {
+            'access_token': accessToken,
           },
-        ),
-      );
+          options: Options(
+            headers: {
+              'Accept': 'application/vnd.github+json',
+              'Authorization': 'Bearer $accessToken'
+            },
+          ),
+        );
+      } on DioException catch (e) {
+        // SokectException means the network connection is offline.
+        // when SokectException happens, it should be DioExceptionType.unknown,
+        // because DioException wraps another exception inside of its instance.
+        if (e.type == DioExceptionType.unknown && e.error is SocketException) {
+          // ignore: avoid_print
+          print('access_token revoke failed');
+        } else {
+          rethrow;
+        }
+      }
       await _credentialsStorage.clear();
     } on PlatformException {
       return dartz.left(const AuthFailure.storage());
