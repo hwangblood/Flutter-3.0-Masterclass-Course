@@ -1,5 +1,3 @@
-import 'package:flutter/services.dart';
-
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:oauth2/oauth2.dart' as oauth2 show Credentials;
 

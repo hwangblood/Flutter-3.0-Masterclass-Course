@@ -1,18 +1,28 @@
 import 'package:flutter/services.dart';
 
 import 'package:dartz/dartz.dart' as dartz;
+import 'package:http/http.dart' as http;
+import 'package:oauth2/oauth2.dart' as oauth2;
 
 import 'package:repo_viewer/auth/domain/auth_failure.dart';
 import 'package:repo_viewer/auth/infrastructure/credentials_storage/credentials_storage.dart';
 
-import 'package:oauth2/oauth2.dart' as oauth2;
-
 /// Query parameters for redirect callback, it just contains the authorization code
 typedef QueryParams = Map<String, String>;
 
+class GithubOauthHttpClient extends http.BaseClient {
+  final httpClient = http.Client();
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest request) {
+    // receive the response in json formats from Github Oauth
+    request.headers['Accept'] = 'application/json';
+    return httpClient.send(request);
+  }
+}
+
 class GithubAuthenticator {
   // TODO: don't use plain text here
-  static const clientID = '8c18a431995a651c125c';
+  static const clientId = '8c18a431995a651c125c';
   static const clientSecret = '8bedf732ec05aa9f76d6b095a609839ed383f50c';
 
   /// Scopes define the access for personal tokens.
@@ -61,10 +71,11 @@ class GithubAuthenticator {
       );
 
   oauth2.AuthorizationCodeGrant createGrant() => oauth2.AuthorizationCodeGrant(
-        clientID,
+        clientId,
         authorizationEndpoint,
         tokenEndpoint,
         secret: clientSecret,
+        httpClient: GithubOauthHttpClient(),
       );
 
   Uri getAuthorizationUrl(oauth2.AuthorizationCodeGrant grant) =>

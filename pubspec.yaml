@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   oauth2: ^2.0.1
+  http: ^0.13.6
   flutter_secure_storage: ^8.0.0
   dartz: ^0.10.1 # using Either, Unit and more
   dio: ^5.2.1+1
