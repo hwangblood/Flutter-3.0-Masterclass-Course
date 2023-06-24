@@ -1,19 +1,32 @@
 name: repo_viewer
 description: A new Flutter project.
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: ">=2.19.6 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  oauth2: ^2.0.1
+  flutter_secure_storage: ^8.0.0
+  dartz: ^0.10.1 # using Either class
+  dio: ^5.2.1+1
+  flutter_hooks: ^0.18.6
+  hooks_riverpod: ^2.3.6
+  freezed_annotation: ^2.2.0
+  webview_flutter: ^4.2.2
+  flash: ^3.0.5+1 # show alerts on ui
+  auto_route: ^7.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^2.0.0
+  build_runner: ^2.3.3
+  freezed: ^2.3.5
+  auto_route_generator: ^7.1.1
 
 flutter:
   uses-material-design: true
