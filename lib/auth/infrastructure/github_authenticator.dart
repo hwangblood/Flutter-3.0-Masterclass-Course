@@ -124,7 +124,7 @@ class GithubAuthenticator {
     try {
       try {
         // revoke the access token from github, it will be invalid
-        // https://docs.github.com/en/github-ae@latest/rest/apps/oauth-applications#delete-an-app-authorization
+        // https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#delete-an-app-authorization
         _dio.deleteUri(
           revocationEndpoint,
           data: {

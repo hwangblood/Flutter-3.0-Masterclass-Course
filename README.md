@@ -10,6 +10,8 @@ Original Source Code: [programmingpoint](https://github.com/programmingpoint)/**
 
 [Authorizing OAuth apps - GitHub Docs](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)
 
+[OAuth Authorizations - GitHub Docs](https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28) - [revoke the grant for the token's owner](https://docs.github.com/en/rest/apps/oauth-applications?apiVersion=2022-11-28#delete-an-app-authorization)
+
 [oauth2 | Dart Package](https://pub.dev/packages/oauth2)
 
 ## Architectural
@@ -23,3 +25,4 @@ Domain-Driven Design Principles
 [REST Client - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 
 [Freezed Snippets - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Arkroot.freezed-snippets)
+
