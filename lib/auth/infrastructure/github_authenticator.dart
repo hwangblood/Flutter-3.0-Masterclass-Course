@@ -1,9 +1,14 @@
 import 'package:flutter/services.dart';
 
-import 'package:oauth2/oauth2.dart' as oauth2
-    show Credentials, AuthorizationCodeGrant;
+import 'package:dartz/dartz.dart' as dartz;
 
+import 'package:repo_viewer/auth/domain/auth_failure.dart';
 import 'package:repo_viewer/auth/infrastructure/credentials_storage/credentials_storage.dart';
+
+import 'package:oauth2/oauth2.dart' as oauth2;
+
+/// Query parameters for redirect callback, it just contains the authorization code
+typedef QueryParams = Map<String, String>;
 
 class GithubAuthenticator {
   // TODO: don't use plain text here
@@ -67,4 +72,25 @@ class GithubAuthenticator {
         redirectUrl,
         scopes: scopes,
       );
+
+  /// when exception is happened return an [AuthFailure], otherwise nothing
+  ///
+  /// [dartz.Unit] means the same thing as void, just noting to return
+  Future<dartz.Either<AuthFailure, dartz.Unit>> handleAuthorizationResponse(
+    oauth2.AuthorizationCodeGrant grant,
+    QueryParams queryParams,
+  ) async {
+    try {
+      /// Throws [FormatException] or [AuthorizationException]
+      final httpClient = await grant.handleAuthorizationResponse(queryParams);
+      await _credentialsStorage.save(httpClient.credentials);
+    } on FormatException catch (e) {
+      return dartz.left(AuthFailure.server(e.message));
+    } on oauth2.AuthorizationException catch (e) {
+      return dartz.left(AuthFailure.server('${e.error}: ${e.description}'));
+    } on PlatformException {
+      return dartz.left(const AuthFailure.storage());
+    }
+    return const dartz.Right(dartz.unit);
+  }
 }
