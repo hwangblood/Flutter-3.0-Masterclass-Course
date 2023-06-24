@@ -12,6 +12,12 @@ Original Source Code: [programmingpoint](https://github.com/programmingpoint)/**
 
 [oauth2 | Dart Package](https://pub.dev/packages/oauth2)
 
+## Architectural
+
+Domain-Driven Design Principles 
+
+[Flutter Firebase & DDD Course [1] – Domain-Driven Design Principles - Reso Coder](https://resocoder.com/2020/03/09/flutter-firebase-ddd-course-1-domain-driven-design-principles/)
+
 ## Tools
 
 [REST Client - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
