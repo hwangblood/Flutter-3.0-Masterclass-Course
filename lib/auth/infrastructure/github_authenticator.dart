@@ -1,13 +1,13 @@
-import 'dart:io';
+import 'package:flutter/services.dart';
 
 import 'package:dartz/dartz.dart' as dartz;
 import 'package:dio/dio.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:oauth2/oauth2.dart' as oauth2;
 
 import 'package:repo_viewer/auth/domain/auth_failure.dart';
 import 'package:repo_viewer/auth/infrastructure/credentials_storage/credentials_storage.dart';
+import 'package:repo_viewer/core/infrastructure/dio_extensions.dart';
 
 /// Query parameters for redirect callback, it just contains the authorization code
 typedef QueryParams = Map<String, String>;
@@ -141,9 +141,8 @@ class GithubAuthenticator {
         // SokectException means the network connection is offline.
         // when SokectException happens, it should be DioExceptionType.unknown,
         // because DioException wraps another exception inside of its instance.
-        if (e.type == DioExceptionType.unknown && e.error is SocketException) {
-          // ignore: avoid_print
-          print('access_token revoke failed');
+        if (e.isNoConnectionException) {
+          // Ignoring the exception
         } else {
           rethrow;
         }
