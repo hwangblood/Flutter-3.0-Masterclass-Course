@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -48,5 +49,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       (r) => const AuthState.authenticated(),
     );
     grant.close();
+  }
+
+  Future<void> signOut() async {
+    final failureOrSuccess = await _authenticator.signOut();
+    state = failureOrSuccess.fold(
+      (l) => AuthState.failure(l),
+      (r) => const AuthState.unauthenticated(),
+    );
   }
 }
