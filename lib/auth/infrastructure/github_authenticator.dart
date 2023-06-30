@@ -64,7 +64,6 @@ class GithubAuthenticator {
     oauth2.Credentials? storedCredentials;
     try {
       storedCredentials = await _credentialsStorage.read();
-
       if (storedCredentials != null) {
         if (storedCredentials.canRefresh && storedCredentials.isExpired) {
           // this will nerver happen for GitHub Oauth, because it doesn't support refresh token

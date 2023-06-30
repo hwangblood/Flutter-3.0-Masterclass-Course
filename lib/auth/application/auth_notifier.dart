@@ -15,6 +15,12 @@ class AuthState with _$AuthState {
   const factory AuthState.failure(AuthFailure failure) = _Failure;
 }
 
+/// Authentication Callback function
+/// param [Uri] the the authentication url
+/// return [Uri] should be a redirect uri with code parameter
+/// It looks like: http://localhost:3000/callback?code=adsafgerwx
+typedef AuthUriCallback = Future<Uri> Function(Uri);
+
 class AuthNotifier extends StateNotifier<AuthState> {
   final GithubAuthenticator _authenticator;
 
@@ -27,4 +33,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
         ? const AuthState.authenticated()
         : const AuthState.unauthenticated();
   }
+
+  Future<void> signIn(AuthUriCallback authUriCallback) async {}
 }
