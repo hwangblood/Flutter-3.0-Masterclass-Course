@@ -16,8 +16,8 @@ class AuthState with _$AuthState {
 }
 
 /// Authentication Callback function
-/// param [Uri] the the authentication url
-/// return [Uri] should be a redirect uri with code parameter
+/// param [Uri] the authorization url
+/// return [Uri] should be a redirect uri with authorization code parameter
 /// It looks like: http://localhost:3000/callback?code=adsafgerwx
 typedef AuthUriCallback = Future<Uri> Function(Uri);
 
@@ -34,5 +34,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
         : const AuthState.unauthenticated();
   }
 
-  Future<void> signIn(AuthUriCallback authUriCallback) async {}
+  Future<void> signIn(AuthUriCallback authorizationCallback) async {
+    final grant = _authenticator.createGrant();
+    final authorizationUrl = _authenticator.getAuthorizationUrl(grant);
+
+    final redirectUrl = await authorizationCallback(authorizationUrl);
+    final failureOrSuccess = await _authenticator.handleAuthorizationResponse(
+      grant,
+      redirectUrl.queryParameters,
+    );
+    state = failureOrSuccess.fold(
+      (l) => AuthState.failure(l),
+      (r) => const AuthState.authenticated(),
+    );
+    grant.close();
+  }
 }
