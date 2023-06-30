@@ -25,4 +25,3 @@ Domain-Driven Design Principles
 [REST Client - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
 
 [Freezed Snippets - Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=Arkroot.freezed-snippets)
-
