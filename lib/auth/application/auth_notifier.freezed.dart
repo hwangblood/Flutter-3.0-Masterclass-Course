@@ -102,8 +102,8 @@ class __$$_InitialCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Initial implements _Initial {
-  const _$_Initial();
+class _$_Initial extends _Initial {
+  const _$_Initial() : super._();
 
   @override
   String toString() {
@@ -194,8 +194,9 @@ class _$_Initial implements _Initial {
   }
 }
 
-abstract class _Initial implements AuthState {
+abstract class _Initial extends AuthState {
   const factory _Initial() = _$_Initial;
+  const _Initial._() : super._();
 }
 
 /// @nodoc
@@ -216,8 +217,8 @@ class __$$_UnauthenticatedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Unauthenticated implements _Unauthenticated {
-  const _$_Unauthenticated();
+class _$_Unauthenticated extends _Unauthenticated {
+  const _$_Unauthenticated() : super._();
 
   @override
   String toString() {
@@ -308,8 +309,9 @@ class _$_Unauthenticated implements _Unauthenticated {
   }
 }
 
-abstract class _Unauthenticated implements AuthState {
+abstract class _Unauthenticated extends AuthState {
   const factory _Unauthenticated() = _$_Unauthenticated;
+  const _Unauthenticated._() : super._();
 }
 
 /// @nodoc
@@ -330,8 +332,8 @@ class __$$_AuthenticatedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Authenticated implements _Authenticated {
-  const _$_Authenticated();
+class _$_Authenticated extends _Authenticated {
+  const _$_Authenticated() : super._();
 
   @override
   String toString() {
@@ -422,8 +424,9 @@ class _$_Authenticated implements _Authenticated {
   }
 }
 
-abstract class _Authenticated implements AuthState {
+abstract class _Authenticated extends AuthState {
   const factory _Authenticated() = _$_Authenticated;
+  const _Authenticated._() : super._();
 }
 
 /// @nodoc
@@ -468,8 +471,8 @@ class __$$_FailureCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_Failure implements _Failure {
-  const _$_Failure(this.failure);
+class _$_Failure extends _Failure {
+  const _$_Failure(this.failure) : super._();
 
   @override
   final AuthFailure failure;
@@ -571,8 +574,9 @@ class _$_Failure implements _Failure {
   }
 }
 
-abstract class _Failure implements AuthState {
+abstract class _Failure extends AuthState {
   const factory _Failure(final AuthFailure failure) = _$_Failure;
+  const _Failure._() : super._();
 
   AuthFailure get failure;
   @JsonKey(ignore: true)
