@@ -67,14 +67,19 @@ class GithubAuthenticator {
 
       if (storedCredentials != null) {
         if (storedCredentials.canRefresh && storedCredentials.isExpired) {
-          // TODO: refresh the access token
+          // this will nerver happen for GitHub Oauth, because it doesn't support refresh token
+          final failureOrCredentials = await refresh(storedCredentials);
+          return failureOrCredentials.fold(
+            (l) => null,
+            (r) => r,
+          );
         }
       }
+
+      return storedCredentials;
     } on PlatformException {
       return null;
     }
-
-    return storedCredentials;
   }
 
   Future<bool> checkSignedIn() => getSignedInCredentials().then(
@@ -152,5 +157,28 @@ class GithubAuthenticator {
       return dartz.left(const AuthFailure.storage());
     }
     return dartz.right(dartz.unit);
+  }
+
+  Future<dartz.Either<AuthFailure, oauth2.Credentials>> refresh(
+    oauth2.Credentials credentials,
+  ) async {
+    try {
+      // it throws some exceptions
+      final refreshedCredentials = await credentials.refresh(
+        identifier: clientId,
+        secret: clientSecret,
+        httpClient: GithubOauthHttpClient(),
+      );
+      await _credentialsStorage.save(refreshedCredentials);
+      return dartz.right(refreshedCredentials);
+    } on FormatException {
+      return dartz.left(const AuthFailure.server());
+    } on oauth2.AuthorizationException catch (e) {
+      return dartz.left(
+        AuthFailure.server('${e.error}: ${e.description}'),
+      );
+    } on PlatformException {
+      return dartz.left(const AuthFailure.storage());
+    }
   }
 }
