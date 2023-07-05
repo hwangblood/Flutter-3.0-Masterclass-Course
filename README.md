@@ -6,6 +6,8 @@ Projects in this course require Flutter sdk: '>=3.0.0 <3.10.0'
 
 Original Source Code: [programmingpoint](https://github.com/programmingpoint)/**[flutter_3.0_course](https://github.com/programmingpoint/flutter_3.0_course)**
 
+Online Course: https://www.youtube.com/watch?v=ZqEouycRSzY&t=26657s
+
 ## Authentication
 
 [Authorizing OAuth apps - GitHub Docs](https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps)
